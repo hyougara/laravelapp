@@ -11,7 +11,6 @@ use App\Form;
 class FormController extends Controller
 {	
 	public function index(){
-
 			$users = Form::all();
 		return view('form.index', ['users'=>$users ]);
 	}
@@ -21,10 +20,15 @@ class FormController extends Controller
 	}
 
 	public function create(UserRequest $request){
-		$form = array('name' =>$request->name, 'email' => $request->email, 'password' => $request->password);
-		return view('form.confirm',['form' => $form]);
+		// $form = array('name' =>$request->name, 'email' => $request->email, 'password' => $request->password);
+		// フォームの値を全て取得
+		$form = $request->all();
+		// フォームの値をセッションに入れる
+		$request->session()->put($form);
+		// セッションに入れたデータをvieに返す
+		return view('form.confirm',compact('form'));
 
-		// dd($form);
+		// これはセッションには入っていなくて直接保存している input経由的な感じ 値がinput内じゃないとエラー吐く
 		// $form = new Form;
 		// $user = $request->all();
 		// unset($user['_token']);
@@ -32,11 +36,24 @@ class FormController extends Controller
 		// return view('form.confirm',['form' => $form]);
 	}
 
-	public function complete(UserRequest $request){
-		$form = new Form;	
-		$users = $request->all();
-		unset($users['_token']);
-		$form->fill($users)->save();
+	public function complete(Request $request){
+		// $form = new Form;	
+		// $users = $request->all();
+		// unset($users['_token']);
+		// $form->fill($users)->save();
+		// dd($request);
+		
+		// $form = new Form;
+		// sessionを全て取得し、モデルを作成と同時に保存
+		$user = session()->all();
+		(new Form($user))->save();
+
+		// dd($request->all());
+		// $user = $request->all();
+		// dd($request->all());
+		// $user = session()->put($request->all());
+		// dd($user);
+		// dd(session()->put($user));
 		return view('form.complete');
 	}
 

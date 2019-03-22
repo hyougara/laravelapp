@@ -2,6 +2,8 @@
 @section('title', 'new')
 @section('content')
 
+<h1>入力フォーム</h1>
+
 <form action="" method="post" >
 {{ csrf_field() }}
   <table >

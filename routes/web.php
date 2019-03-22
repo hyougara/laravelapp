@@ -1,4 +1,10 @@
 <?php
+Route::get('login/index', 'loginController@index');
+Route::get('login/sign-in', 'loginController@signIn');
+Route::post('login/index', 'loginController@login');
+
+
+
 Route::get('form/index', 'FormController@index');
 
 Route::get('form/new','FormController@new');
